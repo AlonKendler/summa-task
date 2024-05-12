@@ -1,0 +1,60 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Upload Receipt";
+}
+
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+
+    <form id="receiptForm" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="receiptImage">Receipt Image</label>
+            <input type="file" class="form-control-file" id="receiptImage" name="receiptImage" accept="image/*"
+                required>
+        </div>
+        <div class="form-group">
+            <label for="emailAddress">Email Address</label>
+            <input type="email" class="form-control" id="emailAddress" name="emailAddress" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Upload and Process</button>
+    </form>
+
+    <div id="result"></div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function ()
+        {
+            $('#receiptForm').on('submit', function (e)
+            {
+                e.preventDefault();
+
+                var formData = new FormData(this);
+
+                $.ajax({
+                    url: '@Url.Page("Index")', // Update this with the correct path for your Razor Pages route
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (data)
+                    {
+                        if (data.success)
+                        {
+                            $('#result').html('<div class="alert alert-success">' + data.message + '</div>');
+                        } else
+                        {
+                            $('#result').html('<div class="alert alert-danger">' + data.message + '</div>');
+                        }
+                    },
+                    error: function ()
+                    {
+                        $('#result').html('<div class="alert alert-danger">An error occurred while processing the receipt.</div>');
+                    }
+                });
+            });
+        });
+    </script>
+}
