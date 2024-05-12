@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "U1PJbPWIcpSHBiPw2mig54tQzlFH4cfgakjdbx6+Mzf4Qb08LbFNLf6tRrg0WFhQ6bvBKIZByPztdjQKvOVctQ==",
+  "dgSpecHash": "6qOUBgluLIuGQ9bI6P/3pNixCeG8pefIr+wzgZ+IR8o87O82Z7Kx+m+q9j8K1dbQ47mi0QNLZ/wLwX+NcLhWjw==",
   "success": true,
   "projectFilePath": "/Users/alon/summa-task/summa-task.csproj",
   "expectedPackageFiles": [
+    "/Users/alon/.nuget/packages/ironocr/2020.11.2/ironocr.2020.11.2.nupkg.sha512",
+    "/Users/alon/.nuget/packages/ironocr.languages.hebrew/2020.11.2/ironocr.languages.hebrew.2020.11.2.nupkg.sha512",
     "/Users/alon/.nuget/packages/microsoft.aspnetcore.jsonpatch/8.0.4/microsoft.aspnetcore.jsonpatch.8.0.4.nupkg.sha512",
     "/Users/alon/.nuget/packages/microsoft.aspnetcore.mvc.newtonsoftjson/8.0.4/microsoft.aspnetcore.mvc.newtonsoftjson.8.0.4.nupkg.sha512",
     "/Users/alon/.nuget/packages/microsoft.csharp/4.7.0/microsoft.csharp.4.7.0.nupkg.sha512",

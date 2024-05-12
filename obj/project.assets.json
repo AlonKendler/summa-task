@@ -2,6 +2,33 @@
   "version": 3,
   "targets": {
     "net8.0": {
+      "IronOcr/2020.11.2": {
+        "type": "package",
+        "dependencies": {
+          "System.Drawing.Common": "4.7.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/IronOcr.Assets.dll": {},
+          "lib/netstandard2.0/IronOcr.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/IronOcr.Assets.dll": {},
+          "lib/netstandard2.0/IronOcr.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "IronOcr.Languages.Hebrew/2020.11.2": {
+        "type": "package",
+        "dependencies": {
+          "IronOcr": "2020.11.2"
+        },
+        "build": {
+          "build/IronOcr.Languages.Hebrew.targets": {}
+        }
+      },
       "Microsoft.AspNetCore.JsonPatch/8.0.4": {
         "type": "package",
         "dependencies": {
@@ -163,6 +190,38 @@
     }
   },
   "libraries": {
+    "IronOcr/2020.11.2": {
+      "sha512": "EV6V9euW2J/Fv3Ev8Ws4PRGnjqWaYSGzhSah408jjg25xVljC9cOye7j2OiBHwqpBwAk+gOh8Y+ASuEv0rSaqw==",
+      "type": "package",
+      "path": "ironocr/2020.11.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ironocr.2020.11.2.nupkg.sha512",
+        "ironocr.nuspec",
+        "lib/net40/IronOcr.Assets.dll",
+        "lib/net40/IronOcr.dll",
+        "lib/net40/IronOcr.xml",
+        "lib/netstandard2.0/IronOcr.Assets.dll",
+        "lib/netstandard2.0/IronOcr.dll",
+        "lib/netstandard2.0/IronOcr.xml",
+        "readme.txt"
+      ]
+    },
+    "IronOcr.Languages.Hebrew/2020.11.2": {
+      "sha512": "bsLIto5QcFAVuGcHcp16qdkcWBCo8uoORPim5xM4YFCTZ/KB+4Nsp22oPCXUDWTydD8SYMgrwghGkuldpdA+Rw==",
+      "type": "package",
+      "path": "ironocr.languages.hebrew/2020.11.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "OcrData/Hebrew.ocrdata",
+        "build/IronOcr.Languages.Hebrew.targets",
+        "ironocr.languages.hebrew.2020.11.2.nupkg.sha512",
+        "ironocr.languages.hebrew.nuspec",
+        "readme.txt"
+      ]
+    },
     "Microsoft.AspNetCore.JsonPatch/8.0.4": {
       "sha512": "8iy7uza6GTuE5GadOryGfsGuA8xP1RTs16zqdXF5gM0b8iDfyNWnyDmatY5cZhXE1kJiko0S7s1T/gNFdIZ7Zg==",
       "type": "package",
@@ -481,6 +540,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "IronOCR.Languages.Hebrew >= 2020.11.2",
       "Microsoft.AspNetCore.Mvc.NewtonsoftJson >= 8.0.4",
       "System.Drawing.Common >= 8.0.4",
       "Tesseract >= 5.2.0",
@@ -529,6 +589,10 @@
       "net8.0": {
         "targetAlias": "net8.0",
         "dependencies": {
+          "IronOCR.Languages.Hebrew": {
+            "target": "Package",
+            "version": "[2020.11.2, )"
+          },
           "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
             "target": "Package",
             "version": "[8.0.4, )"
