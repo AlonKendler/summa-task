@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Drawing;
-using System.IO;
 using Tesseract;
 
 namespace summa_task.Pages
@@ -17,44 +16,65 @@ namespace summa_task.Pages
             _logger = logger;
         }
 
-        public IActionResult OnPost(Receipt receipt)
+        public async Task<IActionResult> OnPostAsync(List<IFormFile> receiptImage, string emailAddress)
         {
             try
             {
                 _logger.LogInformation("Received receipt image and email address.");
 
-                // Convert byte array to Image
-                using (var ms = new MemoryStream(receipt.ReceiptImage))
+                // Check if receiptImage is provided
+                if (receiptImage == null || receiptImage.Count == 0)
                 {
-                    var image = Image.FromStream(ms);
-                    _logger.LogInformation("Converted byte array to image.");
+                    _logger.LogWarning("Receipt image is null or empty.");
+                    return new JsonResult(new { success = false, message = "Please provide a receipt image." });
+                }
 
-                    // Perform OCR using Tesseract
-                    using (var engine = new TesseractEngine(@"./tessdata", "heb", EngineMode.Default))
+                // Read the uploaded file into a byte array
+                using (var memoryStream = new MemoryStream())
+                {
+                    await receiptImage[0].OpenReadStream().CopyToAsync(memoryStream);
+                    var receiptImageData = memoryStream.ToArray();
+
+                    // Create a Receipt object with the image data and email address
+                    var receipt = new Receipt
                     {
-                        _logger.LogInformation("Tesseract engine initialized.");
+                        ReceiptImage = receiptImageData,
+                        EmailAddress = emailAddress
+                    };
 
-                        using (var img = new System.Drawing.Bitmap(image))
+                    // Convert byte array to Image
+                    using (var ms = new MemoryStream(receipt.ReceiptImage))
+                    {
+                        var image = Image.FromStream(ms);
+                        _logger.LogInformation("Converted byte array to image.");
+
+                        // Perform OCR using Tesseract
+                        using (var engine = new TesseractEngine(@"./tessdata", "heb", EngineMode.Default))
                         {
-                            _logger.LogInformation("Created bitmap from image.");
+                            _logger.LogInformation("Tesseract engine initialized.");
 
-                            using (var page = engine.Process(img))
+                            using (var img = new System.Drawing.Bitmap(image))
                             {
-                                var GetMeanConfidence = string.Format("{0:P}", page.GetMeanConfidence());
-                                _logger.LogInformation($"OCR mean confidence: {GetMeanConfidence}");
+                                _logger.LogInformation("Created bitmap from image.");
 
-                                var ocrOutput = page.GetText();
-                                _logger.LogInformation("OCR output retrieved.");
+                                using (var page = engine.Process(img))
+                                {
+                                    var GetMeanConfidence = string.Format("{0:P}", page.GetMeanConfidence());
+                                    _logger.LogInformation($"OCR mean confidence: {GetMeanConfidence}");
 
-                                // Send OCR output to email
-                                _emailService.SendEmailWithOcrOutput(receipt.EmailAddress, ocrOutput);
-                                _logger.LogInformation("Email sent successfully.");
+                                    var ocrOutput = page.GetText();
+                                    _logger.LogInformation("OCR output retrieved.");
+
+                                    // Send OCR output to email
+                                    _emailService.SendEmailWithOcrOutput(receipt.EmailAddress, ocrOutput);
+                                    _logger.LogInformation("Email sent successfully.");
+                                }
                             }
                         }
                     }
                 }
 
-                return new JsonResult(new { success = true, message = $"Email sent to: {receipt.EmailAddress}" });
+                return new JsonResult(new { success = true, message = $"Email sent to: {emailAddress}" });
             }
             catch (Exception ex)
             {
