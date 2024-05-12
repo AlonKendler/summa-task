@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v8.0": {
       "summa-task/1.0.0": {
         "dependencies": {
+          "IronOcr.Languages.Hebrew": "2020.11.2",
           "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "8.0.4",
           "System.Drawing.Common": "8.0.4",
           "Tesseract": "5.2.0",
@@ -15,6 +16,26 @@
         },
         "runtime": {
           "summa-task.dll": {}
+        }
+      },
+      "IronOcr/2020.11.2": {
+        "dependencies": {
+          "System.Drawing.Common": "8.0.4"
+        },
+        "runtime": {
+          "lib/netstandard2.0/IronOcr.Assets.dll": {
+            "assemblyVersion": "2020.11.2.0",
+            "fileVersion": "2020.11.2.0"
+          },
+          "lib/netstandard2.0/IronOcr.dll": {
+            "assemblyVersion": "2020.11.2.0",
+            "fileVersion": "2020.11.2.0"
+          }
+        }
+      },
+      "IronOcr.Languages.Hebrew/2020.11.2": {
+        "dependencies": {
+          "IronOcr": "2020.11.2"
         }
       },
       "Microsoft.AspNetCore.JsonPatch/8.0.4": {
@@ -120,6 +141,20 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "IronOcr/2020.11.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-EV6V9euW2J/Fv3Ev8Ws4PRGnjqWaYSGzhSah408jjg25xVljC9cOye7j2OiBHwqpBwAk+gOh8Y+ASuEv0rSaqw==",
+      "path": "ironocr/2020.11.2",
+      "hashPath": "ironocr.2020.11.2.nupkg.sha512"
+    },
+    "IronOcr.Languages.Hebrew/2020.11.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-bsLIto5QcFAVuGcHcp16qdkcWBCo8uoORPim5xM4YFCTZ/KB+4Nsp22oPCXUDWTydD8SYMgrwghGkuldpdA+Rw==",
+      "path": "ironocr.languages.hebrew/2020.11.2",
+      "hashPath": "ironocr.languages.hebrew.2020.11.2.nupkg.sha512"
     },
     "Microsoft.AspNetCore.JsonPatch/8.0.4": {
       "type": "package",

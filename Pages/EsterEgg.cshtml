@@ -1,0 +1,58 @@
+@page
+@model summa_task.Pages.esterEggModel
+@{
+    ViewData["Title"] = "esterEgg";
+}
+
+<h1>@ViewData["Title"]</h1>
+<div id="renderCanvas" style="width: 100vw; height: 50vh; position: relative;"></div>
+
+<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+    <!-- Your small form or content goes here -->
+    <h2>Small Form</h2>
+    <form>
+        <input type="text" placeholder="Enter your name" />
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', function ()
+        {
+            // Create a scene
+            const scene = new THREE.Scene();
+
+            // Create a camera
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 5;
+
+            // Create a renderer
+            const renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            document.getElementById('renderCanvas').appendChild(renderer.domElement);
+
+            // Load the logo image
+            const loader = new THREE.TextureLoader();
+            const logoTexture = loader.load('/images/logo.png');
+
+            // Create a plane for the logo
+            const logoGeometry = new THREE.PlaneGeometry(2, 2); // Adjust the size as needed
+            const logoMaterial = new THREE.MeshBasicMaterial({ map: logoTexture });
+            const logoPlane = new THREE.Mesh(logoGeometry, logoMaterial);
+            logoPlane.position.set(0, 0, 0); // Adjust the position as needed
+            scene.add(logoPlane);
+
+            // Render the scene
+            function animate()
+            {
+                requestAnimationFrame(animate);
+                logoPlane.rotation.y += 0.01; // Rotate the logo plane around the Y-axis
+                renderer.render(scene, camera);
+            }
+            animate();
+        });
+    </script>
+}

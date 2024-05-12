@@ -13,6 +13,14 @@
       "PackagePath": "staticwebassets/favicon.ico"
     },
     {
+      "Id": "/Users/alon/summa-task/wwwroot/images/background.jpeg",
+      "PackagePath": "staticwebassets/images/background.jpeg"
+    },
+    {
+      "Id": "/Users/alon/summa-task/wwwroot/images/logo.png",
+      "PackagePath": "staticwebassets/images/logo.png"
+    },
+    {
       "Id": "/Users/alon/summa-task/wwwroot/js/site.js",
       "PackagePath": "staticwebassets/js/site.js"
     },
