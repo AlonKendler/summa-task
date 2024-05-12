@@ -1,8 +1,19 @@
 {
   "version": 2,
-  "dgSpecHash": "j1TIcnGXLSUm50eARSXye0rL3wul8OQ1DyYTuzy6RAzjrntmy1P9HW8wQH77H1t5SoFLfq98VB94kwP1xL1RiA==",
+  "dgSpecHash": "U1PJbPWIcpSHBiPw2mig54tQzlFH4cfgakjdbx6+Mzf4Qb08LbFNLf6tRrg0WFhQ6bvBKIZByPztdjQKvOVctQ==",
   "success": true,
   "projectFilePath": "/Users/alon/summa-task/summa-task.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/Users/alon/.nuget/packages/microsoft.aspnetcore.jsonpatch/8.0.4/microsoft.aspnetcore.jsonpatch.8.0.4.nupkg.sha512",
+    "/Users/alon/.nuget/packages/microsoft.aspnetcore.mvc.newtonsoftjson/8.0.4/microsoft.aspnetcore.mvc.newtonsoftjson.8.0.4.nupkg.sha512",
+    "/Users/alon/.nuget/packages/microsoft.csharp/4.7.0/microsoft.csharp.4.7.0.nupkg.sha512",
+    "/Users/alon/.nuget/packages/microsoft.win32.systemevents/8.0.0/microsoft.win32.systemevents.8.0.0.nupkg.sha512",
+    "/Users/alon/.nuget/packages/newtonsoft.json/13.0.3/newtonsoft.json.13.0.3.nupkg.sha512",
+    "/Users/alon/.nuget/packages/newtonsoft.json.bson/1.0.2/newtonsoft.json.bson.1.0.2.nupkg.sha512",
+    "/Users/alon/.nuget/packages/system.drawing.common/8.0.4/system.drawing.common.8.0.4.nupkg.sha512",
+    "/Users/alon/.nuget/packages/system.reflection.emit/4.7.0/system.reflection.emit.4.7.0.nupkg.sha512",
+    "/Users/alon/.nuget/packages/tesseract/5.2.0/tesseract.5.2.0.nupkg.sha512",
+    "/Users/alon/.nuget/packages/tesseract.drawing/5.2.0/tesseract.drawing.5.2.0.nupkg.sha512"
+  ],
   "logs": []
 }

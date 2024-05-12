@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Drawing;
-using System.IO;
+
 using Tesseract;
 
 namespace summa_task.Pages;
@@ -26,10 +26,12 @@ public class IndexModel : PageModel
                 // Perform OCR using Tesseract
                 using (var engine = new TesseractEngine(@"./tessdata", "heb", EngineMode.Default))
                 {
-                    using (var img = PixConverter.ToPix(image))
+                    // using (var img = PixConverter.ToPix(image))
+                    using (var img = new System.Drawing.Bitmap(image))
                     {
                         using (var page = engine.Process(img))
                         {
+                            var GetMeanConfidence = String.Format("{0:P}", page.GetMeanConfidence());
                             var ocrOutput = page.GetText();
 
                             // Send OCR output to email

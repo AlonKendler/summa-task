@@ -1,5 +1,5 @@
 public class Receipt
 {
-    public byte[] ReceiptImage { get; set; }
-    public string EmailAddress { get; set; }
+    public required byte[] ReceiptImage { get; set; }
+    public required string EmailAddress { get; set; }
 }
