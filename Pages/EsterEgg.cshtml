@@ -5,22 +5,10 @@
 }
 
 <h1>@ViewData["Title"]</h1>
-<div id="renderCanvas" style="width: 100vw; height: 50vh; position: relative;"></div>
-
-<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-    <!-- Your small form or content goes here -->
-    <h2>Small Form</h2>
-    <form>
-        <input type="text" placeholder="Enter your name" />
-        <button type="submit">Submit</button>
-    </form>
-</div>
 
 @section Scripts {
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        window.addEventListener('DOMContentLoaded', function ()
-        {
+        window.addEventListener('DOMContentLoaded', function () {
             // Create a scene
             const scene = new THREE.Scene();
 
@@ -30,7 +18,7 @@
 
             // Create a renderer
             const renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setSize(window.innerWidth / 2, window.innerHeight / 2);
             renderer.setPixelRatio(window.devicePixelRatio);
             document.getElementById('renderCanvas').appendChild(renderer.domElement);
 
@@ -46,8 +34,7 @@
             scene.add(logoPlane);
 
             // Render the scene
-            function animate()
-            {
+            function animate() {
                 requestAnimationFrame(animate);
                 logoPlane.rotation.y += 0.01; // Rotate the logo plane around the Y-axis
                 renderer.render(scene, camera);

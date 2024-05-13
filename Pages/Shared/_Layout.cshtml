@@ -7,7 +7,6 @@
     <title>@ViewData["Title"] - summa_task</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    @* <link rel="stylesheet" href="~/summa_task.styles.css" asp-append-version="true" /> *@
 </head>
 
 <body>
@@ -35,23 +34,58 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div id="renderCanvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;"></div>
+    <div class="container" style="position: relative; z-index: 1;">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
-
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2024 - summa_task - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', function ()
+        {
+            // Create a scene
+            const scene = new THREE.Scene();
+
+            // Create a camera
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 5;
+
+            // Create a renderer
+            const renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            @* document.getElementById('renderCanvas').appendChild(renderer.domElement); *@
+
+            // Load the background image
+            const loader = new THREE.TextureLoader();
+
+
+            // Create a background plane
+            const geometry = new THREE.PlaneGeometry(10, 10); // Adjust the size as needed
+            const material = new THREE.MeshBasicMaterial();
+            const plane = new THREE.Mesh(geometry, material);
+            scene.add(plane);
+
+            // Render the scene
+            function animate()
+            {
+                requestAnimationFrame(animate);
+                renderer.render(scene, camera);
+            }
+            animate();
+        });
+    </script>
 </body>
 
 </html>
