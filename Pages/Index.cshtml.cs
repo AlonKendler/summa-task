@@ -16,6 +16,12 @@ namespace summa_task.Pages
             _logger = logger;
         }
 
+
+        public IActionResult OnGet(string id)
+        {
+            return new JsonResult(new { success = true, mesaage = "onGet" });
+        }
+
         public async Task<IActionResult> OnPostAsync(List<IFormFile> receiptImage, string emailAddress)
         {
             try

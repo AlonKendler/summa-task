@@ -18,6 +18,10 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = /Users/alon/summa-task
 build_property._RazorSourceGeneratorDebug = 
 
+[/Users/alon/summa-task/Pages/api/ReciptOCR.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvYXBpL1JlY2lwdE9DUi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/alon/summa-task/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 

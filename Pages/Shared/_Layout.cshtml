@@ -24,6 +24,9 @@
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/api/ReciptOCR">api</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/EsterEgg">ester egg</a>
                         </li>
                         <li class="nav-item">
@@ -65,7 +68,7 @@
             const renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(window.devicePixelRatio);
-            @* document.getElementById('renderCanvas').appendChild(renderer.domElement); *@
+        @* document.getElementById('renderCanvas').appendChild(renderer.domElement); *@
 
             // Load the background image
             const loader = new THREE.TextureLoader();

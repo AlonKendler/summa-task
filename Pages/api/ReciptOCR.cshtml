@@ -1,0 +1,24 @@
+@page
+@model summa_task.Pages.api.ReciptOCRModel
+@{
+    ViewData["Title"] = "Receipt OCR";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (Model.OCRData != null)
+{
+    <div>
+        <h2>OCR Text Output</h2>
+        <pre>@Model.OCRData.Text</pre>
+    </div>
+
+    <div>
+        <h2>Original Receipt Image</h2>
+        <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.OCRData.ImageData)" alt="Receipt Image" />
+    </div>
+}
+else
+{
+    <p>Processing receipt...</p>
+}
