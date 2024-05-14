@@ -21,6 +21,7 @@
     </form>
 
     <div id="result"></div>
+    <img id="uploadedImage" src="" alt="Uploaded Image" style="max-width: 100%;" />
 </div>
 
 @section Scripts {
@@ -43,15 +44,18 @@
                     {
                         if (data.success)
                         {
-                            $('#result').html('<div class="alert alert-success">' + data.message + '</div>');
+                            $('#result').html('<div class="alert alert-success">' + data.extractedText + '</div>');
+                            $('#uploadedImage').attr('src', data.imageDataUrl);
                         } else
                         {
                             $('#result').html('<div class="alert alert-danger">' + data.message + '</div>');
+                            $('#uploadedImage').attr('src', '');
                         }
                     },
                     error: function ()
                     {
                         $('#result').html('<div class="alert alert-danger">An error occurred while processing the receipt.</div>');
+                        $('#uploadedImage').attr('src', '');
                     }
                 });
             });

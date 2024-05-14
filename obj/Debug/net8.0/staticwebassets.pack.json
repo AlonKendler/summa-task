@@ -21,6 +21,10 @@
       "PackagePath": "staticwebassets/images/logo.png"
     },
     {
+      "Id": "/Users/alon/summa-task/wwwroot/images/sample-recipt.png",
+      "PackagePath": "staticwebassets/images/sample-recipt.png"
+    },
+    {
       "Id": "/Users/alon/summa-task/wwwroot/js/site.js",
       "PackagePath": "staticwebassets/js/site.js"
     },

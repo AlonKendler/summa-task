@@ -43,6 +43,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Google.Cloud.Vision.V1": {
+              "target": "Package",
+              "version": "[3.6.0, )"
+            },
             "IronOCR.Languages.Hebrew": {
               "target": "Package",
               "version": "[2020.11.2, )"

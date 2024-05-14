@@ -3,6 +3,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<EmailService>();
+var googleCredentialsPath = builder.Configuration["GoogleCredentials"];
+Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", Path.Combine(builder.Environment.ContentRootPath, googleCredentialsPath));
 
 var app = builder.Build();
 

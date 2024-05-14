@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "VENam1t+Hm1th8Xp4fGH3pDXEGkcu5AGkQx4/7xUr4g=",
+  "Hash": "BOI3RB4CIztxlhyelVU5EkNIJwYGiRugzNRJO6wRfCo=",
   "Source": "summa-task",
   "BasePath": "_content/summa-task",
   "Mode": "Default",
@@ -129,6 +129,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/images/logo.png"
+    },
+    {
+      "Identity": "/Users/alon/summa-task/wwwroot/images/sample-recipt.png",
+      "SourceId": "summa-task",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/alon/summa-task/wwwroot/",
+      "BasePath": "_content/summa-task",
+      "RelativePath": "images/sample-recipt.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/images/sample-recipt.png"
     },
     {
       "Identity": "/Users/alon/summa-task/wwwroot/js/site.js",
