@@ -4,24 +4,41 @@
     ViewData["Title"] = "Upload Receipt";
 }
 
-<div class="text-center">
-    <h1 class="display-4">@ViewData["Title"]</h1>
-
-    <form id="receiptForm" method="post" enctype="multipart/form-data">
-        <div class="form-group">
-            <label for="receiptImage">Receipt Image</label>
-            <input type="file" class="form-control-file" id="receiptImage" name="receiptImage" accept="image/*"
-                required>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">@ViewData["Title"]</h4>
+                </div>
+                <div class="card-body">
+                    <form id="receiptForm" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="receiptImage" class="font-weight-bold">Receipt Image</label>
+                            <input type="file" class="form-control-file" id="receiptImage" name="receiptImage"
+                                accept="image/*" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="emailAddress" class="font-weight-bold">Email Address</label>
+                            <input type="email" class="form-control" id="emailAddress" name="emailAddress" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="submitBtn">Upload and Process</button>
+                        <div class="spinner-border text-primary d-none" id="loadingSpinner" role="status">
+                            <span class="sr-only">hire me</span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div id="result"></div>
+                </div>
+                <div class="col-md-6">
+                    <img id="uploadedImage" src="" alt="Uploaded Image" class="img-fluid d-none" />
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="emailAddress">Email Address</label>
-            <input type="email" class="form-control" id="emailAddress" name="emailAddress" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Upload and Process</button>
-    </form>
-
-    <div id="result"></div>
-    <img id="uploadedImage" src="" alt="Uploaded Image" style="max-width: 100%;" />
+    </div>
 </div>
 
 @section Scripts {
@@ -31,31 +48,35 @@
             $('#receiptForm').on('submit', function (e)
             {
                 e.preventDefault();
-
+                $('#loadingSpinner').removeClass('d-none');
+                $('#submitBtn').prop('disabled', true);
                 var formData = new FormData(this);
-
                 $.ajax({
-                    url: '@Url.Page("Index")', // Update this with the correct path for your Razor Pages route
+                    url: '@Url.Page("Index")',
                     type: 'POST',
                     data: formData,
                     contentType: false,
                     processData: false,
                     success: function (data)
                     {
+                        $('#loadingSpinner').addClass('d-none');
+                        $('#submitBtn').prop('disabled', false);
                         if (data.success)
                         {
                             $('#result').html('<div class="alert alert-success">' + data.extractedText + '</div>');
-                            $('#uploadedImage').attr('src', data.imageDataUrl);
+                            $('#uploadedImage').attr('src', data.imageDataUrl).removeClass('d-none');
                         } else
                         {
                             $('#result').html('<div class="alert alert-danger">' + data.message + '</div>');
-                            $('#uploadedImage').attr('src', '');
+                            $('#uploadedImage').attr('src', '').addClass('d-none');
                         }
                     },
                     error: function ()
                     {
+                        $('#loadingSpinner').addClass('d-none');
+                        $('#submitBtn').prop('disabled', false);
                         $('#result').html('<div class="alert alert-danger">An error occurred while processing the receipt.</div>');
-                        $('#uploadedImage').attr('src', '');
+                        $('#uploadedImage').attr('src', '').addClass('d-none');
                     }
                 });
             });
