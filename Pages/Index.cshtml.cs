@@ -1,25 +1,24 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Google.Cloud.Vision.V1;
-using Resend;
+using summa_task.Services;
+
 
 namespace summa_task.Pages
 {
-
     public class IndexModel : PageModel
     {
-
-        private readonly IResend _resend;
-        private readonly EmailService _emailService;
+        private readonly IConfiguration _configuration;
         private readonly ILogger<IndexModel> _logger;
+        private readonly IImageProcessingService _imageProcessingService;
+        private readonly IEmailService _emailService;
 
-        public IndexModel(EmailService emailService, ILogger<IndexModel> logger, IResend resend)
+        public IndexModel(IConfiguration configuration, ILogger<IndexModel> logger, IImageProcessingService imageProcessingService, IEmailService emailService)
         {
-            _emailService = emailService;
+            _configuration = configuration;
             _logger = logger;
-            _resend = resend;
+            _imageProcessingService = imageProcessingService;
+            _emailService = emailService;
         }
-
 
         public async Task<IActionResult> OnPostAsync(IFormFile receiptImage, string emailAddress)
         {
@@ -27,57 +26,35 @@ namespace summa_task.Pages
             {
                 _logger.LogInformation("Received receipt image and email address.");
 
-                // Check if receiptImage is provided
-                if (receiptImage == null)
+                // Check if receiptImage and emailAddress are provided
+                if (receiptImage == null || string.IsNullOrWhiteSpace(emailAddress))
                 {
-                    _logger.LogWarning("Receipt image is null or empty.");
-                    return new JsonResult(new { success = false, message = "Please provide a receipt image." });
+                    _logger.LogWarning("Receipt image or email address is null or empty.");
+                    return new JsonResult(new { Success = false, Message = "Please provide a receipt image and a valid email address." });
                 }
 
                 // Read the uploaded file into a byte array
-                using (var memoryStream = new MemoryStream())
-                {
-                    await receiptImage.CopyToAsync(memoryStream);
+                using var memoryStream = new MemoryStream();
+                await receiptImage.CopyToAsync(memoryStream);
+                var imageBytes = memoryStream.ToArray();
 
-                    var image = Image.FromBytes(memoryStream.ToArray());
-                    _logger.LogInformation("Converted byte array to image.");
+                // Process the image using an image processing service
+                var (extractedText, imageDataUrl) = await _imageProcessingService.ProcessImageAsync(imageBytes);
 
-                    _logger.LogInformation("google vision  engine initialized.");
-                    var client = ImageAnnotatorClient.Create();
-                    var response = await client.DetectTextAsync(image);
-                    var imageDataUrl = ConvertToDataUrl(memoryStream.ToArray());
-                    var extractedText = string.Join(Environment.NewLine, response.SelectMany(annotation => annotation.Description.Split(new[] { '\n' }, StringSplitOptions.None)));
+                // Send the extracted text via email using an email service
+                await _emailService.SendEmailAsync(
+                    emailAddress,
+                    "Image to Text email - test",
+                    extractedText,
+                    _configuration["emailSender"]);
 
-
-                    var msg = new EmailMessage();
-                    msg.From = "onboarding@resend.dev";
-                    msg.To.Add("alonkendler@gmail.com");
-                    msg.Subject = "Image to Text";
-                    msg.HtmlBody = extractedText;
-
-                    await _resend.EmailSendAsync(msg);
-
-                    return new JsonResult(new
-                    {
-                        success = true,
-                        imageDataUrl,
-                        extractedText
-                    });
-                }
+                return new JsonResult(new { Success = true, ExtractedText = extractedText, ImageDataUrl = imageDataUrl });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while processing the receipt.");
-                return new JsonResult(new
-                {
-                    success = false,
-                    message = ex.Message
-                });
+                return new JsonResult(new { Success = false, Message = ex.Message });
             }
-        }
-        private string ConvertToDataUrl(byte[] imageBtyes)
-        {
-            return $"data:image/png;base64, {Convert.ToBase64String(imageBtyes)}";
         }
     }
 }

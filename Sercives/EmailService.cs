@@ -1,18 +1,32 @@
-using System.Net.Mail;
+using Resend;
 
-public class EmailService
+namespace summa_task.Services
 {
-    public void SendEmailWithOcrOutput(string emailAddress, string ocrOutput)
+    public interface IEmailService
     {
-        // replace with sender email
-        var smtpClient = new SmtpClient("smtp.example.com");
-        var mailMessage = new MailMessage
+        Task SendEmailAsync(string to, string subject, string body, string from);
+    }
+
+    public class ResendEmailService : IEmailService
+    {
+        private readonly IResend _resend;
+
+        public ResendEmailService(IResend resend)
         {
-            From = new MailAddress("sender@example.com"),
-            Subject = "Receipt OCR Output",
-            Body = ocrOutput
-        };
-        mailMessage.To.Add(emailAddress);
-        smtpClient.Send(mailMessage);
+            _resend = resend;
+        }
+
+        public async Task SendEmailAsync(string to, string subject, string body, string from)
+        {
+            var msg = new EmailMessage
+            {
+                From = from,
+                To = { to },
+                Subject = subject,
+                HtmlBody = body
+            };
+
+            await _resend.EmailSendAsync(msg);
+        }
     }
 }
