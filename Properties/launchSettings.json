@@ -31,7 +31,8 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "RESEND_APITOKEN": "re_Bdq2kDgi_DwX7sPi783Smo2D8JWSbMmMN"
       }
     }
   }

@@ -1,4 +1,17 @@
+using Resend;
+
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddOptions();
+builder.Services.AddHttpClient<ResendClient>();
+// TODO: env variable is not wokring? 
+builder.Services.Configure<ResendClientOptions>(o =>
+{
+    o.ApiToken = "re_Bdq2kDgi_DwX7sPi783Smo2D8JWSbMmMN";
+});
+builder.Services.AddTransient<IResend, ResendClient>();
 
 // Add services to the container.
 builder.Services.AddRazorPages();

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("summa-task")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c3e295e9ae8a957bf94ec74eeddb384baf7232e6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+189656b8ade318d8aa9b65c4ce09f71a2285bc8e")]
 [assembly: System.Reflection.AssemblyProductAttribute("summa-task")]
 [assembly: System.Reflection.AssemblyTitleAttribute("summa-task")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

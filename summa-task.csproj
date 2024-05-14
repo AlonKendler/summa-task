@@ -9,12 +9,9 @@
 
   <ItemGroup>
     <PackageReference Include="Google.Cloud.Vision.V1" Version="3.6.0" />
-    <PackageReference Include="IronOCR.Languages.Hebrew" Version="2020.11.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.4" />
-    <PackageReference Include="Mindee" Version="3.13.0" />
+    <PackageReference Include="Resend" Version="0.0.7" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.4" />
-    <PackageReference Include="Tesseract" Version="5.2.0" />
-    <PackageReference Include="Tesseract.Drawing" Version="5.2.0" />
   </ItemGroup>
 
 </Project>

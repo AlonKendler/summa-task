@@ -1,20 +1,23 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Tesseract;
 using Google.Cloud.Vision.V1;
+using Resend;
 
 namespace summa_task.Pages
 {
 
     public class IndexModel : PageModel
     {
+
+        private readonly IResend _resend;
         private readonly EmailService _emailService;
         private readonly ILogger<IndexModel> _logger;
 
-        public IndexModel(EmailService emailService, ILogger<IndexModel> logger)
+        public IndexModel(EmailService emailService, ILogger<IndexModel> logger, IResend resend)
         {
             _emailService = emailService;
             _logger = logger;
+            _resend = resend;
         }
 
 
@@ -22,14 +25,14 @@ namespace summa_task.Pages
         {
             try
             {
-                // _logger.LogInformation("Received receipt image and email address.");
+                _logger.LogInformation("Received receipt image and email address.");
 
-                // // Check if receiptImage is provided
-                // if (receiptImage == null || receiptImage.Count == 0)
-                // {
-                //     _logger.LogWarning("Receipt image is null or empty.");
-                //     return new JsonResult(new { success = false, message = "Please provide a receipt image." });
-                // }
+                // Check if receiptImage is provided
+                if (receiptImage == null)
+                {
+                    _logger.LogWarning("Receipt image is null or empty.");
+                    return new JsonResult(new { success = false, message = "Please provide a receipt image." });
+                }
 
                 // Read the uploaded file into a byte array
                 using (var memoryStream = new MemoryStream())
@@ -45,56 +48,22 @@ namespace summa_task.Pages
                     var imageDataUrl = ConvertToDataUrl(memoryStream.ToArray());
                     var extractedText = string.Join(Environment.NewLine, response.SelectMany(annotation => annotation.Description.Split(new[] { '\n' }, StringSplitOptions.None)));
 
+
+                    var msg = new EmailMessage();
+                    msg.From = "onboarding@resend.dev";
+                    msg.To.Add("alonkendler@gmail.com");
+                    msg.Subject = "Image to Text";
+                    msg.HtmlBody = extractedText;
+
+                    await _resend.EmailSendAsync(msg);
+
                     return new JsonResult(new
                     {
                         success = true,
                         imageDataUrl,
                         extractedText
                     });
-
-                    // await receiptImage[0].OpenReadStream().CopyToAsync(memoryStream);
-                    // var receiptImageData = memoryStream.ToArray();
-
-                    // // Create a Receipt object with the image data and email address
-                    // var receipt = new Receipt
-                    // {
-                    //     ReceiptImage = receiptImageData,
-                    //     EmailAddress = emailAddress
-                    // };
-
-                    // // Convert byte array to Image
-                    // // using (var ms = new MemoryStream(receipt.ReceiptImage))
-                    // {
-                    //     var image = Image.FromStream(ms);
-                    //     _logger.LogInformation("Converted byte array to image.");
-
-                    //     // Perform OCR using Tesseract
-                    //     using (var engine = new TesseractEngine(@"./tessdata", "heb", EngineMode.Default))
-                    //     {
-                    //         _logger.LogInformation("Tesseract engine initialized.");
-
-                    //         using (var img = new System.Drawing.Bitmap(image))
-                    //         {
-                    //             _logger.LogInformation("Created bitmap from image.");
-
-                    //             using (var page = engine.Process(img))
-                    //             {
-                    //                 var GetMeanConfidence = string.Format("{0:P}", page.GetMeanConfidence());
-                    //                 _logger.LogInformation($"OCR mean confidence: {GetMeanConfidence}");
-
-                    //                 var ocrOutput = page.GetText();
-                    //                 _logger.LogInformation("OCR output retrieved.");
-
-                    //                 // Send OCR output to email
-                    //                 _emailService.SendEmailWithOcrOutput(receipt.EmailAddress, ocrOutput);
-                    //                 _logger.LogInformation("Email sent successfully.");
-                    //             }
-                    //         }
-                    //     }
-                    // }
                 }
-
-                return new JsonResult(new { success = true, message = $"Email sent to: {emailAddress}" });
             }
             catch (Exception ex)
             {
