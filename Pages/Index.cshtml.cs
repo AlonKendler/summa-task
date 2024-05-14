@@ -39,7 +39,7 @@ namespace summa_task.Pages
                 var imageBytes = memoryStream.ToArray();
 
                 // Process the image using an image processing service
-                var (extractedText, imageDataUrl) = await _imageProcessingService.ProcessImageAsync(imageBytes);
+                var (response, extractedText, imageDataUrl) = await _imageProcessingService.ProcessImageAsync(imageBytes);
 
                 // Send the extracted text via email using an email service
                 await _emailService.SendEmailAsync(
@@ -48,7 +48,7 @@ namespace summa_task.Pages
                     extractedText,
                     _configuration["emailSender"]);
 
-                return new JsonResult(new { Success = true, ExtractedText = extractedText, ImageDataUrl = imageDataUrl });
+                return new JsonResult(new { Success = true, ExtractedText = extractedText, ImageDataUrl = imageDataUrl, response = response });
             }
             catch (Exception ex)
             {
