@@ -12,6 +12,11 @@
                     <h4 class="mb-0">@ViewData["Title"]</h4>
                 </div>
                 <div class="card-body">
+                    @if (Model.EmailErrorMessage != null)
+                    {
+                        <div class="alert alert-danger">@Model.EmailErrorMessage</div>
+                    }
+
                     <form id="receiptForm" method="post" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="receiptImage" class="font-weight-bold">Receipt Image</label>
@@ -29,15 +34,14 @@
                     </form>
                 </div>
             </div>
+
             <div class="row mt-4">
-                <div class="col-md-6">
-                    <div id="result"></div>
+                <div class="col-md-6" id="result">
                 </div>
                 <div class="col-md-6">
                     <img id="uploadedImage" src="" alt="Uploaded Image" class="img-fluid d-none" />
                 </div>
             </div>
-
         </div>
     </div>
 </div>
@@ -62,28 +66,34 @@
                     {
                         $('#loadingSpinner').addClass('d-none');
                         $('#submitBtn').prop('disabled', false);
+
+                        // Update UI based on success/error data
+                        $('#result').html(''); // Clear the result container
+
                         if (data.success)
                         {
-                            $('#result').html('<div class="alert alert-success">' + data.extractedText + '</div>');
+                            $('#result').append('<div class="alert alert-success">' + data.extractedText + '</div>');
                             $('#uploadedImage').attr('src', data.imageDataUrl).removeClass('d-none');
                         } else
                         {
-                            $('#result').html('<div class="alert alert-danger">' + data.message + '</div>');
+                            $('#result').append('<div class="alert alert-danger">' + data.message + '</div>');
+                            // Display email error message even with data
+                            if (data.EmailErrorMessage)
+                            {
+                                $('#result').append('<div class="alert alert-danger">' + data.EmailErrorMessage + '</div>');
+                            }
                             $('#uploadedImage').attr('src', '').addClass('d-none');
                         }
                     },
                     error: function ()
                     {
+                        // Handle general errors here (optional)
                         $('#loadingSpinner').addClass('d-none');
                         $('#submitBtn').prop('disabled', false);
-                        $('#result').html('<div class="alert alert-danger">An error occurred while processing the receipt.</div>');
-                        $('#uploadedImage').attr('src', '').addClass('d-none');
+                        console.error('An error occurred while processing the receipt.');
                     }
                 });
             });
-
-
-
         });
     </script>
 }
