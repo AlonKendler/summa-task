@@ -1,0 +1,40 @@
+@page
+@model FormatModel
+
+<div class="mt-4">
+    <form id="formatForm">
+        <div class="form-group">
+            <label for="ocrText" class="font-weight-bold">OCR Text</label>
+            <textarea class="form-control" id="ocrText" name="ocrText" rows="5"></textarea>
+        </div>
+        <button type="submit" class="btn btn-secondary" id="formatBtn">Format Text</button>
+    </form>
+    <div id="formattedText" class="mt-3"></div>
+</div>
+
+@section Scripts {
+
+    <script>
+        $(function ()
+        {
+            $('#formatForm').on('submit', function (e)
+            {
+                e.preventDefault();
+                var ocrText = $('#ocrText').val();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Page("Format")',
+                    data: JSON.stringify({ ocrText: ocrText }),
+                    success: function (data)
+                    {
+                        console.log(data);
+                    },
+                    error: function (xhr, status, error)
+                    {
+                        console.log(error);
+                    }
+                });
+            });
+        });
+    </script>
+}

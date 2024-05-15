@@ -11,13 +11,24 @@ namespace summa_task.Pages
         private readonly ILogger<IndexModel> _logger;
         private readonly IImageProcessingService _imageProcessingService;
         private readonly IEmailService _emailService;
+        private readonly FormattingService _formattingService;
 
-        public IndexModel(IConfiguration configuration, ILogger<IndexModel> logger, IImageProcessingService imageProcessingService, IEmailService emailService)
+        public string ExtractedText { get; set; }
+        public string FormattedText { get; set; }
+        public bool EmailSent { get; set; }
+
+        public IndexModel(
+            IConfiguration configuration,
+            ILogger<IndexModel> logger,
+            IImageProcessingService imageProcessingService,
+            IEmailService emailService,
+            FormattingService formattingService)
         {
             _configuration = configuration;
             _logger = logger;
             _imageProcessingService = imageProcessingService;
             _emailService = emailService;
+            _formattingService = formattingService;
         }
 
         public async Task<IActionResult> OnPostAsync(IFormFile receiptImage, string emailAddress)
@@ -48,6 +59,9 @@ namespace summa_task.Pages
                     extractedText,
                     _configuration["emailSender"]);
 
+                ExtractedText = extractedText;
+                EmailSent = true;
+
                 return new JsonResult(new { Success = true, ExtractedText = extractedText, ImageDataUrl = imageDataUrl, response = response });
             }
             catch (Exception ex)
@@ -56,5 +70,6 @@ namespace summa_task.Pages
                 return new JsonResult(new { Success = false, Message = ex.Message });
             }
         }
+
     }
 }

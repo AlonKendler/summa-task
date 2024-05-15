@@ -57,3 +57,4 @@
 /Users/alon/summa-task/bin/Debug/net8.0/System.Management.dll
 /Users/alon/summa-task/bin/Debug/net8.0/runtimes/win/lib/net7.0/System.Management.dll
 /Users/alon/summa-task/bin/Debug/net8.0/Resend.dll
+/Users/alon/summa-task/bin/Debug/net8.0/OpenAI_API.dll
