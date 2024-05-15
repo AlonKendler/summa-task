@@ -2,31 +2,45 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using summa_task.Services;
 
-public class FormatModel : PageModel
+namespace summa_task.Pages
 {
-    private readonly FormattingService _formattingService;
-    private readonly ILogger<FormatModel> _logger;
-
-    public FormatModel(FormattingService formattingService, ILogger<FormatModel> logger)
+    public class FormatModel : PageModel
     {
-        _formattingService = formattingService;
-        _logger = logger;
-    }
+        private readonly FormattingService _formattingService;
+        private readonly ILogger<FormatModel> _logger;
 
-    [BindProperty]
-    public string? ocrText { get; set; }
-    public async Task<IActionResult> OnPostAsync()
-    {
-        _logger.LogInformation("Request Body: " + Request.Body);
-        _logger.LogInformation($"Received OCR text: {ocrText}");
-        try
+        public FormatModel(FormattingService formattingService, ILogger<FormatModel> logger)
         {
-            var formattedText = await _formattingService.FormatInputAsync(ocrText);
-            return new JsonResult(new { Success = true, FormattedText = formattedText });
+            _formattingService = formattingService;
+            _logger = logger;
         }
-        catch (Exception ex)
+
+        public async Task<IActionResult> OnPostAsync([FromBody] InputModel input)
         {
-            return new JsonResult(new { Success = false, Message = ex.Message });
+            _logger.LogInformation("Received request to format text.");
+
+            if (string.IsNullOrWhiteSpace(input?.OcrText))
+            {
+                _logger.LogWarning("OCR text is required.");
+                return BadRequest(new { success = false, message = "OCR text is required." });
+            }
+
+            try
+            {
+                _logger.LogInformation("Formatting text: {OcrText}", input.OcrText);
+                string formattedText = await _formattingService.FormatInputAsync(input.OcrText);
+                return new JsonResult(new { success = true, formattedText = formattedText });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while formatting the text.");
+                return StatusCode(500, new { success = false, message = ex.Message });
+            }
+        }
+
+        public class InputModel
+        {
+            public string OcrText { get; set; }
         }
     }
 }

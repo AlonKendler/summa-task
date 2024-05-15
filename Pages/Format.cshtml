@@ -5,7 +5,7 @@
     <form id="formatForm">
         <div class="form-group">
             <label for="ocrText" class="font-weight-bold">OCR Text</label>
-            <textarea class="form-control" id="ocrText" name="ocrText" rows="5"></textarea>
+            <textarea class="form-control" id="ocrText" name="ocrText" rows="15"></textarea>
         </div>
         <button type="submit" class="btn btn-secondary" id="formatBtn">Format Text</button>
     </form>
@@ -13,7 +13,6 @@
 </div>
 
 @section Scripts {
-
     <script>
         $(function ()
         {
@@ -22,15 +21,23 @@
                 e.preventDefault();
                 var ocrText = $('#ocrText').val();
                 $.ajax({
+                    url: '@Url.Page("./format")',
                     type: 'POST',
-                    url: '@Url.Page("Format")',
+                    contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify({ ocrText: ocrText }),
                     success: function (data)
                     {
-                        console.log(data);
+                        if (data.success)
+                        {
+                            $('#formattedText').text(data.formattedText);
+                        } else
+                        {
+                            $('#formattedText').text(data.message);
+                        }
                     },
                     error: function (xhr, status, error)
                     {
+                        $('#formattedText').text('An error occurred while formatting the text.');
                         console.log(error);
                     }
                 });
