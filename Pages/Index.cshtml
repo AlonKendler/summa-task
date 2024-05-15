@@ -12,7 +12,7 @@
                     <h4 class="mb-0">@ViewData["Title"]</h4>
                 </div>
                 <div class="card-body">
-                    <div id="emailErrorMessage" class="alert alert-danger"></div>
+                    <div id="emailErrorMessage" class="alert alert-danger d-none"></div>
 
                     <form id="receiptForm" method="post" enctype="multipart/form-data">
                         <div class="form-group">
@@ -25,7 +25,7 @@
                         </div>
                         <button type="submit" class="btn btn-primary" id="submitBtn">Upload and Process</button>
                         <div class="spinner-border text-primary d-none" id="loadingSpinner" role="status">
-                            <span class="sr-only">Loading...</span>
+                            <span class="sr-only"></span>
                         </div>
                     </form>
                 </div>
@@ -38,20 +38,19 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-4">
+                            <div class="col-md-12">
+                            <h5>Raw Text</h5>
+                            <div id="rawText" class="pre-scrollable" dir="rtl"></div>
+                        </div>
+                        <div class="col-md-6">
                             <img id="uploadedImage" src="" alt="Uploaded Image" class="img-fluid d-none" />
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-6">
                             <h5>Formatted Text</h5>
                             <pre id="formattedText" class="pre-scrollable"></pre>
                         </div>
                     </div>
-                    <div class="row mt-4">
-                        <div class="col-md-12">
-                            <h5>Raw Text</h5>
-                            <pre id="rawText" class="pre-scrollable" dir="rtl"></pre>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -94,9 +93,9 @@
 
                             // Display email status
                             if (data.emailSent) {
-                                $('#emailErrorMessage').addClass('alert-success').text('Email sent successfully.');
+                                $('#emailErrorMessage').removeClass('d-none').addClass('alert-success').text('Email sent successfully.');
                             } else {
-                                $('#emailErrorMessage').addClass('alert-danger').text(data.emailErrorMessage || 'Failed to send email.');
+                                $('#emailErrorMessage').removeClass('d-none').addClass('alert-danger').text(data.emailErrorMessage || 'Failed to send email.');
                             }
                         } else {
                             // Display error message

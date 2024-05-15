@@ -59,6 +59,7 @@ namespace summa_task.Pages
                 EmailSent = await _emailService.SendEmailAsync(
                     emailAddress,
                     "Image to Text email - test",
+                    FormattedText,
                     extractedText,
                     _configuration["emailSender"]);
 

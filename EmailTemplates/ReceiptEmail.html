@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Receipt Email</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <h2>Receipt Details</h2>
+    <h3>Formatted Text</h3>
+    <pre>@Model.FormattedText</pre>
+    <h3>Raw Text</h3>
+    <div dir="rtl">@Model.ExtractedText</div>
+</body>
+</html>

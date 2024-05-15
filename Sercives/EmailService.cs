@@ -1,33 +1,42 @@
+using System.IO;
 using Resend;
 
 namespace summa_task.Services
 {
     public interface IEmailService
     {
-        Task<bool> SendEmailAsync(string to, string subject, string body, string from);
+        Task<bool> SendEmailAsync(string to, string subject, string formattedText, string extractedText, string from);
     }
 
     public class ResendEmailService : IEmailService
     {
         private readonly IResend _resend;
+        private readonly string _emailTemplateFilePath = Path.Combine(Directory.GetCurrentDirectory(), "EmailTemplates", "ReceiptEmail.html");
 
         public ResendEmailService(IResend resend)
         {
             _resend = resend;
         }
 
-        public async Task<bool> SendEmailAsync(string to, string subject, string body, string from)
+        public async Task<bool> SendEmailAsync(string to, string subject, string formattedText, string extractedText, string from)
         {
-            var msg = new EmailMessage
-            {
-                From = from,
-                To = { to },
-                Subject = subject,
-                HtmlBody = body
-            };
-
             try
             {
+                // Read the email template
+                var emailTemplate = await File.ReadAllTextAsync(_emailTemplateFilePath);
+
+                // Replace placeholders with actual values
+                emailTemplate = emailTemplate.Replace("@Model.FormattedText", formattedText);
+                emailTemplate = emailTemplate.Replace("@Model.ExtractedText", extractedText);
+
+                var msg = new EmailMessage
+                {
+                    From = from,
+                    To = { to },
+                    Subject = subject,
+                    HtmlBody = emailTemplate
+                };
+
                 await _resend.EmailSendAsync(msg);
                 return true; // Indicate successful email sending
             }
