@@ -6,22 +6,18 @@
 
 <div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header bg-primary text-white">
                     <h4 class="mb-0">@ViewData["Title"]</h4>
                 </div>
                 <div class="card-body">
-                    @if (Model.EmailErrorMessage != null)
-                    {
-                        <div class="alert alert-danger">@Model.EmailErrorMessage</div>
-                    }
+                    <div id="emailErrorMessage" class="alert alert-danger"></div>
 
                     <form id="receiptForm" method="post" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="receiptImage" class="font-weight-bold">Receipt Image</label>
-                            <input type="file" class="form-control-file" id="receiptImage" name="receiptImage"
-                                accept="image/*" required>
+                            <input type="file" class="form-control-file" id="receiptImage" name="receiptImage" accept="image/*" required>
                         </div>
                         <div class="form-group">
                             <label for="emailAddress" class="font-weight-bold">Email Address</label>
@@ -34,12 +30,28 @@
                     </form>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <div class="row mt-4">
-                <div class="col-md-6" id="result">
-                </div>
-                <div class="col-md-6">
-                    <img id="uploadedImage" src="" alt="Uploaded Image" class="img-fluid d-none" />
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img id="uploadedImage" src="" alt="Uploaded Image" class="img-fluid d-none" />
+                        </div>
+                        <div class="col-md-8">
+                            <h5>Formatted Text</h5>
+                            <pre id="formattedText" class="pre-scrollable"></pre>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <h5>Raw Text</h5>
+                            <pre id="rawText" class="pre-scrollable" dir="rtl"></pre>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -48,10 +60,8 @@
 
 @section Scripts {
     <script>
-        $(function ()
-        {
-            $('#receiptForm').on('submit', function (e)
-            {
+        $(function () {
+            $('#receiptForm').on('submit', function (e) {
                 e.preventDefault();
                 $('#loadingSpinner').removeClass('d-none');
                 $('#submitBtn').prop('disabled', true);
@@ -62,31 +72,38 @@
                     data: formData,
                     contentType: false,
                     processData: false,
-                    success: function (data)
-                    {
+                    success: function (data) {
                         $('#loadingSpinner').addClass('d-none');
                         $('#submitBtn').prop('disabled', false);
 
-                        // Update UI based on success/error data
-                        $('#result').html(''); // Clear the result container
+                        // Reset previous content
+                        $('#rawText').text('');
+                        $('#formattedText').text('');
+                        $('#uploadedImage').attr('src', '').addClass('d-none');
+                        $('#emailErrorMessage').text('').removeClass('alert-danger alert-success');
 
-                        if (data.success)
-                        {
-                            $('#result').append('<div class="alert alert-success">' + data.extractedText + '</div>');
+                        if (data && data.success) {
+                            // Display extracted text
+                            $('#rawText').text(data.extractedText);
+
+                            // Display formatted text
+                            $('#formattedText').text(data.formattedText);
+
+                            // Display uploaded image
                             $('#uploadedImage').attr('src', data.imageDataUrl).removeClass('d-none');
-                        } else
-                        {
-                            $('#result').append('<div class="alert alert-danger">' + data.message + '</div>');
-                            // Display email error message even with data
-                            if (data.EmailErrorMessage)
-                            {
-                                $('#result').append('<div class="alert alert-danger">' + data.EmailErrorMessage + '</div>');
+
+                            // Display email status
+                            if (data.emailSent) {
+                                $('#emailErrorMessage').addClass('alert-success').text('Email sent successfully.');
+                            } else {
+                                $('#emailErrorMessage').addClass('alert-danger').text(data.emailErrorMessage || 'Failed to send email.');
                             }
-                            $('#uploadedImage').attr('src', '').addClass('d-none');
+                        } else {
+                            // Display error message
+                            $('#rawText').text(data.message || 'An error occurred while processing the receipt.');
                         }
                     },
-                    error: function ()
-                    {
+                    error: function () {
                         // Handle general errors here (optional)
                         $('#loadingSpinner').addClass('d-none');
                         $('#submitBtn').prop('disabled', false);

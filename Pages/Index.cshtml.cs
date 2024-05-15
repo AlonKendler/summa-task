@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using summa_task.Services;
 
-
 namespace summa_task.Pages
 {
     public class IndexModel : PageModel
@@ -16,6 +15,7 @@ namespace summa_task.Pages
         public string ExtractedText { get; set; }
         public string FormattedText { get; set; }
         public bool EmailSent { get; set; }
+        public string EmailErrorMessage { get; set; }
 
         public IndexModel(
             IConfiguration configuration,
@@ -37,7 +37,7 @@ namespace summa_task.Pages
             {
                 _logger.LogInformation("Received receipt image and email address.");
 
-                // Check if receiptImage and emailAddress are provided
+                // Validate input
                 if (receiptImage == null || string.IsNullOrWhiteSpace(emailAddress))
                 {
                     _logger.LogWarning("Receipt image or email address is null or empty.");
@@ -49,20 +49,38 @@ namespace summa_task.Pages
                 await receiptImage.CopyToAsync(memoryStream);
                 var imageBytes = memoryStream.ToArray();
 
-                // Process the image using an image processing service
+                // Process the image
                 var (response, extractedText, imageDataUrl) = await _imageProcessingService.ProcessImageAsync(imageBytes);
 
-                // Send the extracted text via email using an email service
-                await _emailService.SendEmailAsync(
+                // Format the extracted text
+                FormattedText = await _formattingService.FormatInputAsync(extractedText);
+
+                // Send the extracted text via email
+                EmailSent = await _emailService.SendEmailAsync(
                     emailAddress,
                     "Image to Text email - test",
                     extractedText,
                     _configuration["emailSender"]);
 
-                ExtractedText = extractedText;
-                EmailSent = true;
+                // Handle email sending errors
+                if (!EmailSent)
+                {
+                    EmailErrorMessage = "An error occurred while sending the email. Please try again later.";
+                }
 
-                return new JsonResult(new { Success = true, ExtractedText = extractedText, ImageDataUrl = imageDataUrl, response = response });
+                ExtractedText = extractedText;
+
+                // Return the JSON response
+                return new JsonResult(new
+                {
+                    Success = true,
+                    ExtractedText,
+                    FormattedText,
+                    ImageDataUrl = imageDataUrl,
+                    Response = response,
+                    EmailSent,
+                    EmailErrorMessage
+                });
             }
             catch (Exception ex)
             {
@@ -70,6 +88,5 @@ namespace summa_task.Pages
                 return new JsonResult(new { Success = false, Message = ex.Message });
             }
         }
-
     }
 }

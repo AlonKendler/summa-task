@@ -21,7 +21,7 @@
                 e.preventDefault();
                 var ocrText = $('#ocrText').val();
                 $.ajax({
-                    url: '@Url.Page("./format")',
+                    url: '@Url.Page("Index")',
                     type: 'POST',
                     contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify({ ocrText: ocrText }),

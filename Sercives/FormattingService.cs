@@ -18,7 +18,7 @@ namespace summa_task.Services
         {
             // Create a new conversation
             var chat = _openAiClient.Chat.CreateConversation();
-            chat.Model = Model.GPT4_Turbo;
+            chat.Model = Model.ChatGPTTurbo_1106;
             chat.RequestParameters.Temperature = 0.7;
 
             // Set the system message with instructions

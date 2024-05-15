@@ -4,7 +4,7 @@ namespace summa_task.Services
 {
     public interface IEmailService
     {
-        Task SendEmailAsync(string to, string subject, string body, string from);
+        Task<bool> SendEmailAsync(string to, string subject, string body, string from);
     }
 
     public class ResendEmailService : IEmailService
@@ -16,7 +16,7 @@ namespace summa_task.Services
             _resend = resend;
         }
 
-        public async Task SendEmailAsync(string to, string subject, string body, string from)
+        public async Task<bool> SendEmailAsync(string to, string subject, string body, string from)
         {
             var msg = new EmailMessage
             {
@@ -26,7 +26,17 @@ namespace summa_task.Services
                 HtmlBody = body
             };
 
-            await _resend.EmailSendAsync(msg);
+            try
+            {
+                await _resend.EmailSendAsync(msg);
+                return true; // Indicate successful email sending
+            }
+            catch (Exception ex)
+            {
+                // Log the email sending error for debugging
+                Console.WriteLine($"Error sending email: {ex.Message}");
+                return false; // Indicate email sending failure
+            }
         }
     }
 }
