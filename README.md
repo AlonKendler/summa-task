@@ -6,7 +6,7 @@ project initialized by `dotnet new webapp`
 
 ## Overview
 
-Summa Task is a web application designed to process Hebrew tax receipts using OCR and format the extracted text into a structured JSON format. The application allows users to upload an image of a receipt, processes the image using Google Vision API, and displays the formatted text on the web page. The formatted text is also sent to the provided email address.
+Summa Task is a web application designed to process Hebrew tax receipts and text images, using OCR and extract the text. The application allows users to upload an image of a receipt, processes the image using Google Vision API, and displays the text on the web page. The text is also sent to the provided email address.
 
 ## Features
 
